@@ -9,37 +9,37 @@ export default class Child extends React.Component {
         }
     }
 
-    componentWillMount() {
-        console.log('Will mount');
-    }
+    // componentWillMount() {
+    //     console.log('Will mount');
+    // }
 
-    componentDidMount() {
-        console.log('Did mount');
-    }
+    // componentDidMount() {
+    //     console.log('Did mount');
+    // }
 
-    componentWillReceiveProps(newProps) {
-        console.log('will props ' + newProps.name)
-    }
+    // componentWillReceiveProps(newProps) {
+    //     console.log('will props ' + newProps.name)
+    // }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        console.log('Should update');
-        return true;
-    }
+    // shouldComponentUpdate = (nextProps, nextState) => {
+    //     console.log('Should update');
+    //     return true;
+    // }
     
-    componentWillUpdate() {
-        console.log('Will update');
-    }
+    // componentWillUpdate() {
+    //     console.log('Will update');
+    // }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log('Did update');
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     console.log('Did update');
+    // }
     
-
     render() {
         return (
             <div>
                 <p>这是子组件</p>
                 <p>{this.props.name}</p>
+                <div>1111</div>     
             </div>
         )
 
