@@ -1,8 +1,13 @@
+/** 常用色值 **/
+/** 常用字体大小 **/
 .container .nav-left {
   height: calc(100vh);
+  color: #ffffff;
+  background-color: #001529;
 }
 .container .main {
   height: calc(100vh);
+  background-color: #f1f3f5;
 }
 .container .content {
   position: relative;
