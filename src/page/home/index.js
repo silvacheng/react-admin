@@ -1,5 +1,4 @@
 import React from 'react'
-import BasicExample from '../basicExample/index'
 import './index.less'
 
 export default class Home extends React.Component {
