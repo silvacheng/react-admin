@@ -19,6 +19,12 @@ export default class Axios{
 
 
     static ajax(options) {
+        let loading;
+        if(options.data && options.data.isShowLoading !== false) {
+            loading = document.getElementById('ajaxLoading');
+            loading.style.display = 'block';
+        }
+
         const baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
 
         return new Promise((resolve, reject) => {
@@ -26,9 +32,13 @@ export default class Axios{
                 url: options.url,
                 method: 'post',
                 baseURL: baseUrl,
-                timeout: 5000,
+                timeout: 15000,
                 params: (options.data && options.data.params) || ''
             }).then((res) => {
+                if(options.data && options.data.isShowLoading !== false) {
+                    loading = document.getElementById('ajaxLoading');
+                    loading.style.display = 'none';
+                }
                 if(res.status === 200) {
                     if(res.data.code === 0) {
                         resolve(res.data)
@@ -41,6 +51,12 @@ export default class Axios{
                 } else {
                     reject(res.data)
                 }
+            }).catch((err) => {
+                if(options.data && options.data.isShowLoading !== false) {
+                    loading = document.getElementById('ajaxLoading');
+                    loading.style.display = 'none';
+                }
+                console.error(err)
             })
         })
     }

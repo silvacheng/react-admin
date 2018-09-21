@@ -1,6 +1,7 @@
 import React from 'react';
-import {Card, Table} from 'antd';
+import { Card, Table } from 'antd';
 import axios from '../../axios/index';
+import { Modal} from 'antd';
 export default class BasicTable extends React.Component{
 
     state = {
@@ -56,14 +57,6 @@ export default class BasicTable extends React.Component{
     }
     
     request = () => {
-        // let baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
-        // axios.post(baseUrl + '/table/list').then((res) => {
-        //     if(res.status === 200) {
-        //         this.setState({
-        //             dataSource2: res.data.result
-        //         })
-        //     }
-        // })
 
         axios.ajax({
             url: '/table/list',
@@ -80,6 +73,18 @@ export default class BasicTable extends React.Component{
             }
         }).catch((err) => {
 
+        })
+    }
+
+    onRowClick = (record, index) => {
+        let selectKey = [index];
+        // Modal.info({
+        //     title: '信息',
+        //     content: `姓名：${record.userName}   爱好：${record.interest}`
+        // })
+        this.setState({
+            selectItem: record,
+            selectedRowKeys: selectKey
         })
     }
 
@@ -124,7 +129,7 @@ export default class BasicTable extends React.Component{
                 dataIndex: 'interest',
                 key: 'interest',
                 align: 'center',
-                render(abc) {
+                render(interest) {
                     let config = {
                         '1': '游泳',
                         '2': '打篮球',
@@ -135,7 +140,7 @@ export default class BasicTable extends React.Component{
                         '7': '桌球',
                         '8': '麦霸'
                     }
-                    return config[abc];
+                    return config[interest];
                 }
             },
             {
@@ -157,6 +162,12 @@ export default class BasicTable extends React.Component{
             }
         ]
 
+        const selectedRowKeys = this.state.selectedRowKeys;
+
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys
+        }
         return (
             <div>
                 <Card title="基础表格">
@@ -170,6 +181,22 @@ export default class BasicTable extends React.Component{
                 <Card title="动态数据表格" style={{margin: '10px 0'}}>
                     <Table 
                         dataSource={this.state.dataSource2} 
+                        columns={columns}
+                        bordered
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="Mock-单选" style={{margin: '10px 0'}}>
+                    <Table 
+                        dataSource={this.state.dataSource2}
+                        rowSelection={rowSelection}
+                        onRow={(record, index) => {
+                            return{
+                                onClick: () => {
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }} 
                         columns={columns}
                         bordered
                         pagination={false}
