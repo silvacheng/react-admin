@@ -18,6 +18,8 @@ import Tabs from './page/ui/tabs';
 // BasicTable
 import BasicTable from './page/table/basicTable';
 import HightTable from './page/table/highTable';
+// City
+import City from './page/city/index';
 // NoMatch
 import NoMatch from './page/nomatch';
 export default class IRouter extends React.Component{
@@ -41,7 +43,8 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/form/login" component={FormLogin}></Route> 
                                 <Route path="/admin/form/register" component={FormRegister}></Route> 
                                 <Route path="/admin/table/basic" component={BasicTable}></Route>  
-                                <Route path="/admin/table/high" component={HightTable}></Route> 
+                                <Route path="/admin/table/high" component={HightTable}></Route>   
+                                <Route path="/admin/city" component={City}></Route> 
                                 <Route component={NoMatch}></Route>
                             </Switch>
                         </Admin>
