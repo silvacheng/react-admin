@@ -1,13 +1,14 @@
 import React from 'react';
-import { Card, Table } from 'antd';
+import { Card, Table, Button, message } from 'antd';
 import axios from '../../axios/index';
 import { Modal} from 'antd';
+import Utils from '../../utils/utils';
 export default class BasicTable extends React.Component{
 
     state = {
         dataSource2: []
     }
-
+    // 页码发生变化  不需要更新dom 因此不用放入state中
     params = {
         page: 1
     }
@@ -68,7 +69,14 @@ export default class BasicTable extends React.Component{
         }).then((res) => {
             if(res.code === 0) {
                 this.setState({
-                    dataSource2: res.result
+                    dataSource2: res.result.list,
+                    selectedRowKeys: [],
+                    selectedRows: null,
+                    pagination: Utils.pagination(res,(current) => {
+                        //TODO
+                        this.params.page = current;
+                        this.request();
+                    })
                 })
             }
         }).catch((err) => {
@@ -78,15 +86,34 @@ export default class BasicTable extends React.Component{
 
     onRowClick = (record, index) => {
         let selectKey = [index];
-        // Modal.info({
-        //     title: '信息',
-        //     content: `姓名：${record.userName}   爱好：${record.interest}`
-        // })
+        Modal.info({
+            title: '信息',
+            content: `姓名：${record.userName}   爱好：${record.interest}`
+        })
+
         this.setState({
             selectItem: record,
             selectedRowKeys: selectKey
         })
     }
+
+    // 多选执行删除动作
+    handleDelete = (()=>{
+        let rows = this.state.selectedRows;
+        let ids = [];
+        rows.map((item)=>{
+            ids.push(item.id)
+        })
+        Modal.confirm({
+            title:'删除提示',
+            content: `您确定要删除这些数据吗？${ids.join(',')}`,
+            onOk:()=>{
+                message.success('删除成功');
+                this.request();
+            }
+        })
+    })
+
 
     render() {
 
@@ -168,6 +195,17 @@ export default class BasicTable extends React.Component{
             type: 'radio',
             selectedRowKeys
         }
+
+        const rowCheckSelection = {
+            type: 'checkbox',
+            selectedRowKeys,
+            onChange:(selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRowKeys,
+                    selectedRows
+                })
+            }
+        }
         return (
             <div>
                 <Card title="基础表格">
@@ -200,6 +238,26 @@ export default class BasicTable extends React.Component{
                         columns={columns}
                         bordered
                         pagination={false}
+                    />
+                </Card>
+                <Card title="Mock-多选" style={{margin: '10px 0'}}>
+                    <div style={{marginBottom:10}}>
+                        <Button onClick={this.handleDelete}>删除</Button>
+                    </div>
+                    <Table 
+                        dataSource={this.state.dataSource2}
+                        rowSelection={rowCheckSelection}
+                        columns={columns}
+                        bordered
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="Mock-分页" style={{margin: '10px 0'}}>
+                    <Table 
+                        dataSource={this.state.dataSource2}
+                        columns={columns}
+                        bordered
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>
