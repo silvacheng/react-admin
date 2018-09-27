@@ -1,5 +1,5 @@
 export default {
-    formateDate(time) {
+    formatDate(time) {
         if (!time) {
             return ''
         }
@@ -26,5 +26,10 @@ export default {
             showQuickJumper: true
         }
         return page
+    },
+    // 隐藏手机号中间4位
+    formatPhone(phone) {
+        phone += '';
+        return phone.replace(/(\d{3})\d*(\d{4})/g, '$1****$2')
     }
 }
