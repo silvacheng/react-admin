@@ -12,6 +12,18 @@
 .header .header-top a {
   margin-left: 40px;
 }
+.header .header-top .logo {
+  line-height: 60px;
+  text-align: left;
+  font-size: 18px;
+}
+.header .header-top .logo img {
+  height: 40px;
+  vertical-align: middle;
+}
+.header .header-top .logo span {
+  margin-left: 5px;
+}
 .header .breadcrumb {
   height: 40px;
   line-height: 40px;
@@ -44,4 +56,8 @@
 .header .breadcrumb .weather .weather-detail {
   margin-left: 10px;
   vertical-align: middle;
+}
+.simple-page .header-top {
+  background: #1890ff;
+  color: #ffffff;
 }

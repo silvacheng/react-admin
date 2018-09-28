@@ -24,6 +24,12 @@ import City from './page/city/index';
 import Order from './page/order/index';
 // NoMatch
 import NoMatch from './page/nomatch';
+
+// 通用组件
+import Common from './common';
+// 订单详情
+import OrderDetail from './page/order/detail';
+
 export default class IRouter extends React.Component{
 
     render() {
@@ -31,7 +37,7 @@ export default class IRouter extends React.Component{
             <HashRouter>
                 <App>
                     <Route path="/login" component={Login}></Route>
-                    <Route path="/admin" component={() => 
+                    <Route path="/admin" render={() => 
                         <Admin>
                             <Switch>
                                 <Route path="/admin/ui/buttons" component={Buttons}></Route>    
@@ -51,8 +57,14 @@ export default class IRouter extends React.Component{
                                 <Route component={NoMatch}></Route>
                             </Switch>
                         </Admin>
-                    }></Route>
-                    <Route path="/order/detail" component={Login}></Route>
+                    }>
+                    </Route>
+                    <Route path="/common" render={() => 
+                        <Common>
+                            <Route path="/common/order/detail/:orderId" component={OrderDetail}/>
+                        </Common>
+                    }>
+                    </Route>
                 </App>
             </HashRouter>
         )

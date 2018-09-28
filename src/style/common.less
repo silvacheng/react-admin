@@ -1,12 +1,25 @@
 @import './default.less';
 @import './loading.less';
+body {
+  background: @colorL;
+  font-family: "Helvetica Neue For Number", "PingFang SC Light", "Heiti SC", "San Francisco", "Helvetica", Arial, sans-serif;
+}
+ul,li{
+  list-style: none;
+}
+.clearfix{
+  &:after{
+    content:" ";
+    clear:both;
+    display:block;
+    visibility:hidden;
+  }
+}
 .container{
     .nav-left{
-        height: calc(100vh);
+        background-color:#001529;
         color: #ffffff;
-        background-color: #001529;
-        position: relative;
-        overflow: hidden;
+        height: calc(100vh);
     }
     .main{
         height: calc(100vh);
@@ -16,5 +29,15 @@
     .content{
         position: relative;
         padding: 20px;
+    }
+}
+
+.content-wrap{
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    margin-top: -3px;
+    .ant-table-wrapper{
+        margin-left: -1px;
+        margin-right: -2px;
     }
 }

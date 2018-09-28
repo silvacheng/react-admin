@@ -1,14 +1,17 @@
 import React from 'react';
-import { Card, Table, Button, message, Form, Select, Modal } from 'antd';
+import { Card, Table, Button, message, Form, Select, Modal, DatePicker } from 'antd';
 import axios from '../../axios/index';
 import Utils from '../../utils/utils';
+import locale from 'antd/lib/date-picker/locale/zh_CN';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 export default class Order extends React.Component{
 
     state = {
-        list: []
+        list: [],
+        isShowOrderConfirm: false,
+        orderInfo: {}
     }
 
     params = {
@@ -19,7 +22,7 @@ export default class Order extends React.Component{
        this.requestList();
     }
     
-
+    // 获取订单列表
     requestList = () => {
         axios.ajax({
             url: '/order/list',
@@ -41,13 +44,77 @@ export default class Order extends React.Component{
         })
     }
 
+    // 选中某条数据
     onRowClick = (record, index) => {
-        console.log(record, index)
         let selectKey = [index];
         this.setState({
             selectedRowKeys: selectKey,
             selectItem: record
         })
+    }
+
+    // 点击结束订单按钮
+    handleConfirm = () => {
+        let item = this.state.selectItem;
+        if(!item) {
+            Modal.info({
+                title: '提示',
+                content: '请选择一条订单进行结束'
+            })
+            return
+        }
+
+        axios.ajax({
+            url: '/order/ebike_info',
+            data: {
+                params: {
+                    orderId: item.id
+                }
+            }
+        }).then(res => {
+            if(res.code === 0) {
+                this.setState({
+                    orderInfo: res.result,
+                    isShowOrderConfirm: true
+                })
+            }
+        })
+    }
+
+    // 结束订单
+    handleFinishOrder = () => {
+        let item = this.state.selectItem;
+        axios.ajax({
+            url: '/order/finish_order',
+            data: {
+                params: {
+                    orderId: item.id
+                }
+            }
+        }).then(res => {
+            if(res.code === 0) {
+                message.success('订单结束成功');
+                this.setState({
+                    isShowOrderConfirm: false
+                })
+                this.requestList();
+            }
+        })
+    }
+
+    openOrderDetail = () => {
+        let item = this.state.selectItem;
+        if(!item) {
+            Modal.info({
+                title: '提示',
+                content: '请选择一条订单进行结束'
+            })
+            return;
+        }
+
+        window.open(`/#/common/order/detail/${item.id}`, '_blank')
+        // window.location.href = `/#/common/order/detail/${item.id}`     
+
     }
 
     render() {
@@ -115,14 +182,23 @@ export default class Order extends React.Component{
             selectedRowKeys
         }
         
+        const formItemLayout = {
+            labelCol: {
+                span: 5
+            },
+            wrapperCol: {
+                span: 18
+            }
+        }
+
         return (
             <div>
                 <Card>
                     <FilterForm/>
                 </Card>
                 <Card style={{marginTop: 10}}>
-                    <Button type="primary" style={{marginRight: 20}}>订单详情</Button>
-                    <Button type="primary">结束订单</Button>
+                    <Button type="primary" style={{marginRight: 20}} onClick={this.openOrderDetail}>订单详情</Button>
+                    <Button type="primary" onClick={this.handleConfirm}>结束订单</Button>
                 </Card>
                 <div className="content-wrapper">
                     <Table
@@ -140,6 +216,24 @@ export default class Order extends React.Component{
                         }}
                     />
                 </div>
+                <Modal
+                    title="结束订单"
+                    visible={this.state.isShowOrderConfirm}
+                    width={600}
+                    onOk={this.handleFinishOrder}
+                    onCancel={() => {
+                        this.setState({
+                            isShowOrderConfirm: false
+                        })
+                    }}
+                >
+                    <Form layout="horizontal">
+                        <FormItem label="车辆编号" {...formItemLayout}>{this.state.orderInfo.bike_sn}</FormItem>
+                        <FormItem label="剩余电量" {...formItemLayout}>{this.state.orderInfo.battary + '%'}</FormItem>
+                        <FormItem label="行程开始时间" {...formItemLayout}>{this.state.orderInfo.start_time}</FormItem>
+                        <FormItem label="当前位置" {...formItemLayout}>{this.state.orderInfo.location}</FormItem>
+                    </Form>
+                </Modal>
             </div>
         )
     }
@@ -166,6 +260,20 @@ class FilterForm extends React.Component{
                         )
                     }
                 </FormItem>
+                <FormItem label="订单时间">
+                    {
+                        getFieldDecorator('start_time')(
+                            <DatePicker locale={locale} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择开始时间" style={{width: '200px'}}></DatePicker>
+                        )
+                    }
+                </FormItem>
+                <FormItem>
+                    {
+                        getFieldDecorator('end_time')(
+                            <DatePicker locale={locale} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择结束时间" style={{width: '200px'}}></DatePicker>
+                        )
+                    }
+                </FormItem>
                 <FormItem label="订单状态">
                     {
                         getFieldDecorator('order_status')(
@@ -175,8 +283,8 @@ class FilterForm extends React.Component{
                             >
                                 <Option value="">全部</Option>
                                 <Option value="1">进行中</Option>
-                                <Option value="2">进行中(临时停车)</Option>
-                                <Option value="2">行程结束</Option>
+                                <Option value="2">进行中</Option>
+                                <Option value="2">结束行程</Option>
                             </Select>
                         )
                     }
