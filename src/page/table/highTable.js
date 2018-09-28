@@ -25,9 +25,9 @@ export default class HighTable extends React.Component{
                 }
             }
         }).then((res) => {
-            if (res.code == 0) {
+            if (res.code === 0) {
                 res.result.list.map((item, index) => {
-                    item.key = index;
+                    return item.key = index;
                 })
                 this.setState({
                     dataSource: res.result.list
@@ -77,7 +77,7 @@ export default class HighTable extends React.Component{
                 width: 80,
                 dataIndex: 'sex',
                 render(sex) {
-                    return sex == 1 ? '男' : '女'
+                    return sex === 1 ? '男' : '女'
                 }
             },
             {
@@ -155,7 +155,7 @@ export default class HighTable extends React.Component{
                 width: 80,
                 dataIndex: 'sex',
                 render(sex) {
-                    return sex == 1 ? '男' : '女'
+                    return sex === 1 ? '男' : '女'
                 }
             },
             {
@@ -250,7 +250,7 @@ export default class HighTable extends React.Component{
                 key: 'sex',
                 dataIndex: 'sex',
                 render(sex) {
-                    return sex == 1 ? '男' : '女'
+                    return sex === 1 ? '男' : '女'
                 }
             },
             {
@@ -324,7 +324,7 @@ export default class HighTable extends React.Component{
                 title: '性别',
                 dataIndex: 'sex',
                 render(sex) {
-                    return sex == 1 ? '男' : '女'
+                    return sex === 1 ? '男' : '女'
                 }
             },
             {

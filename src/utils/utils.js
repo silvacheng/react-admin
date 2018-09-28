@@ -1,3 +1,6 @@
+import React from 'react';
+import { Select } from 'antd'
+const Option = Select.Option;
 export default {
     formatDate(time) {
         if (!time) {
@@ -31,5 +34,15 @@ export default {
     formatPhone(phone) {
         phone += '';
         return phone.replace(/(\d{3})\d*(\d{4})/g, '$1****$2')
+    },
+    getOptionList(data) {
+        if(!data) {
+            return [];
+        }
+        let options = [];
+        data.map((item) => {
+             return options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
+        })
+        // return options;
     }
 }

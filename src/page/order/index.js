@@ -1,10 +1,8 @@
 import React from 'react';
-import { Card, Table, Button, message, Form, Select, Modal, DatePicker } from 'antd';
+import { Card, Table, Button, message, Form, Modal } from 'antd';
 import axios from '../../axios/index';
-import Utils from '../../utils/utils';
-import locale from 'antd/lib/date-picker/locale/zh_CN';
+import BaseForm from '../../component/BaseForm/index';
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 export default class Order extends React.Component{
 
@@ -18,30 +16,62 @@ export default class Order extends React.Component{
         page: 1
     }    
 
+    formList = [
+        {
+            type: 'SELECT',
+            label: '城市',
+            field: 'city_id',
+            placeholder: '全部',
+            initalValue: '1',
+            width: 80,
+            list:[{id: '0', name: '全部'},{id: '1', name: '北京'},{id: '2', name: '上海'},{id: '3', name: '杭州'},{id: '4', name: '深圳'}]
+        },
+        {
+            type: 'DATEPICKER',
+            width: 180,
+        },
+        {
+            type: 'SELECT',
+            label: '订单状态',
+            field: 'order_status',
+            placeholder: '全部',
+            initalValue: '1',
+            width: 80,
+            list:[{id: '0', name: '全部'},{id: '1', name: '进行中'},{id: '2', name: '结束行程'},{id: '3', name: '临时停车'}]
+        }
+        
+        
+    ]
+
     componentDidMount = () => {
        this.requestList();
     }
     
+    // 从子组件BaseForm 响应的方法
+    handleFilter = (params) => {
+        this.params = params;
+        this.requestList();
+    }
+
     // 获取订单列表
     requestList = () => {
-        axios.ajax({
-            url: '/order/list',
-            data: {
-                params: {
-                    page: this.params.page
-                }
-            }
-        }).then(res => {
-            if(res.code === 0) {
-                this.setState({
-                    list: res.result.item_list,
-                    pagination: Utils.pagination(res, (current)=> {
-                        this.params.page = current
-                        this.requestList();
-                    })
-                })
-            }
-        })
+        axios.requestListPost(this, '/order/list', this.params, true);
+        // axios.ajax({
+        //     url: '/order/list',
+        //     data: {
+        //         params: this.params
+        //     }
+        // }).then(res => {
+        //     if(res.code === 0) {
+        //         this.setState({
+        //             list: res.result.item_list,
+        //             pagination: Utils.pagination(res, (current)=> {
+        //                 this.params.page = current
+        //                 this.requestList();
+        //             })
+        //         })
+        //     }
+        // })
     }
 
     // 选中某条数据
@@ -194,7 +224,8 @@ export default class Order extends React.Component{
         return (
             <div>
                 <Card>
-                    <FilterForm/>
+                    {/* <FilterForm/> */}
+                    <BaseForm formList={this.formList} filterSubmit={this.handleFilter}/>
                 </Card>
                 <Card style={{marginTop: 10}}>
                     <Button type="primary" style={{marginRight: 20}} onClick={this.openOrderDetail}>订单详情</Button>
@@ -238,63 +269,3 @@ export default class Order extends React.Component{
         )
     }
 }
-
-class FilterForm extends React.Component{
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-            <Form layout="inline">
-                <FormItem label="城市">
-                    {
-                        getFieldDecorator('city_id')(
-                            <Select
-                                style={{width: 100}}
-                                placeholder="全部"
-                            >
-                                <Option value="">全部</Option>
-                                <Option value="1">北京</Option>
-                                <Option value="2">上海</Option>
-                                <Option value="3">深圳</Option>
-                                <Option value="3">杭州</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-                <FormItem label="订单时间">
-                    {
-                        getFieldDecorator('start_time')(
-                            <DatePicker locale={locale} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择开始时间" style={{width: '200px'}}></DatePicker>
-                        )
-                    }
-                </FormItem>
-                <FormItem>
-                    {
-                        getFieldDecorator('end_time')(
-                            <DatePicker locale={locale} showTime format="YYYY-MM-DD HH:mm:ss" placeholder="请选择结束时间" style={{width: '200px'}}></DatePicker>
-                        )
-                    }
-                </FormItem>
-                <FormItem label="订单状态">
-                    {
-                        getFieldDecorator('order_status')(
-                            <Select
-                                style={{width: 120}}
-                                placeholder="全部"
-                            >
-                                <Option value="">全部</Option>
-                                <Option value="1">进行中</Option>
-                                <Option value="2">进行中</Option>
-                                <Option value="2">结束行程</Option>
-                            </Select>
-                        )
-                    }
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" style={{margin:'0 20px'}}>查询</Button>
-                    <Button>重置</Button>
-                </FormItem>
-            </Form>
-        )
-    }
-}
-FilterForm = Form.create({})(FilterForm);

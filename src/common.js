@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row } from 'antd';
 import Header from './component/Header';
 import './style/common.less';
 export default class Admin extends React.Component{

@@ -1,8 +1,67 @@
 import axios from 'axios';
 import Jsonp from 'jsonp';
 import { Modal} from 'antd';
+import Utils from './../utils/utils';
 
 export default class Axios{
+
+    static requestListPost(_this, url, params, isMock) {
+
+        let data = {
+            params: params,
+            isMock
+        }
+        this.ajax({
+            url,
+            data
+        }).then((res) => {
+            if(res && res.result) {
+                if(res.code === 0) {
+                    let list = res.result.item_list.map((item, index) => {
+                        item.key = index;
+                        return item;
+                    })
+                    _this.setState({ 
+                        list,
+                        pagination: Utils.pagination(res, (current)=> {
+                            _this.params.page = current
+                            _this.requestList();
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+
+
+    static requestListGet(_this, url, params, isMock) {
+
+        let data = {
+            params: params
+        }
+        this.get({
+            url,
+            data
+        }).then((res) => {
+            if(res && res.result) {
+                if(res.code === 0) {
+                    let list = res.result.item_list.map((item, index) => {
+                        item.key = index;
+                        return item;
+                    })
+                    _this.setState({ 
+                        list,
+                        pagination: Utils.pagination(res, (current)=> {
+                            _this.params.page = current
+                            _this.requestList();
+                        })
+                    })
+                }
+            }
+        })
+    }
+
     static jsonp(options) {
         return new Promise((resolve, reject) => {
             Jsonp(options.url, {
@@ -25,7 +84,12 @@ export default class Axios{
             loading.style.display = 'block';
         }
 
-        const baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
+        let baseUrl = '';
+        if(options.data.isMock) {
+            baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
+        } else {
+
+        }
 
         return new Promise((resolve, reject) => {
             axios({
@@ -68,8 +132,13 @@ export default class Axios{
             loading.style.display = 'block';
         }
 
-        const baseUrl = 'https://www.easy-mock.com/mock/5a7278e28d0c633b9c4adbd7/api';
+        let baseUrl = '';
+        if(options.data.isMock) {
+            baseUrl = 'https://www.easy-mock.com/mock/5a7278e28d0c633b9c4adbd7/api';
+        } else {
 
+        }
+        
         return new Promise((resolve, reject) => {
             axios({
                 url: options.url,
@@ -83,7 +152,7 @@ export default class Axios{
                     loading.style.display = 'none';
                 }
                 if(res.status === 200) {
-                    if(res.data.code == '0') {
+                    if(res.data.code === '0') {
                         resolve(res.data)
                     } else {
                         Modal.info({

@@ -22,7 +22,7 @@ export default class OrderDetail extends React.Component {
                 }
             }
         }).then(res => {
-            if (res.code == '0') {
+            if (res.code === '0') {
                 this.setState({
                     orderInfo : res.result
                 })

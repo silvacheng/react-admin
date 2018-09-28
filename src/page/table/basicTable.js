@@ -48,7 +48,7 @@ export default class BasicTable extends React.Component{
         ]
 
         dataSource.map((item, index) => {
-            item.key = index;
+            return item.key = index;
         })
 
         this.setState({
@@ -58,7 +58,6 @@ export default class BasicTable extends React.Component{
     }
     
     request = () => {
-
         axios.ajax({
             url: '/table/list',
             data: {
@@ -102,7 +101,7 @@ export default class BasicTable extends React.Component{
         let rows = this.state.selectedRows;
         let ids = [];
         rows.map((item)=>{
-            ids.push(item.id)
+            return ids.push(item.id)
         })
         Modal.confirm({
             title:'删除提示',
