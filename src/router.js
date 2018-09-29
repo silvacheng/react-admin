@@ -37,7 +37,8 @@ import BikeMap from './page/map/bikeMap';
 import Bar from './page/echarts/bar/index';
 import Line from './page/echarts/line/index';
 import Pie from './page/echarts/pie/index';
-
+// richText 
+import RichText from './page/rich/index';
 export default class IRouter extends React.Component{
 
     render() {
@@ -67,6 +68,7 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/charts/bar" component={Bar}></Route>    
                                 <Route path="/admin/charts/line" component={Line}></Route>    
                                 <Route path="/admin/charts/pie" component={Pie}></Route>    
+                                <Route path="/admin/rich" component={RichText}></Route>    
                                 <Route component={NoMatch}></Route>
                             </Switch>
                         </Admin>
