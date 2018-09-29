@@ -39,8 +39,6 @@ export default class Order extends React.Component{
             width: 80,
             list:[{id: '0', name: '全部'},{id: '1', name: '进行中'},{id: '2', name: '结束行程'},{id: '3', name: '临时停车'}]
         }
-        
-        
     ]
 
     componentDidMount = () => {

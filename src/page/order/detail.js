@@ -18,7 +18,8 @@ export default class OrderDetail extends React.Component {
             url: '/order/detail',
             data: {
                 params: {
-                    orderId: orderId
+                    orderId: orderId,
+                    isMock: true
                 }
             }
         }).then(res => {

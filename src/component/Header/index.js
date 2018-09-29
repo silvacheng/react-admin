@@ -15,12 +15,12 @@ export default class Header extends React.Component {
                 sysTime: sysTime
             })            
         }, 1000)
-        this.getWeatherAPIData()
+        // this.getWeatherAPIData();
     }
 
     getWeatherAPIData() {
         let city = '深圳'
-        axios.jsonp({
+        axios.jsonpData({
             url: 'http://api.map.baidu.com/telematics/v3/weather?location=' + encodeURIComponent(city) + '&output=json&ak=3p49MVra6urFRGOT9s8UBWr2&timeStamp=' + new Date().getTime()
         }).then((res) => {
             if(res.status === 'success') {

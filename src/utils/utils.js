@@ -43,6 +43,6 @@ export default {
         data.map((item) => {
              return options.push(<Option value={item.id} key={item.id}>{item.name}</Option>)
         })
-        // return options;
+        return options;
     }
 }

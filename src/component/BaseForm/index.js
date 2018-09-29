@@ -90,6 +90,16 @@ class FilterForm extends React.Component {
                     </FormItem>
                     formItemList.push(END_TIME);
                 }
+                else if(item.type === 'DATE') {
+                    const DATE = <FormItem label={label} key='date'>
+                        {
+                            getFieldDecorator('date')(
+                                <DatePicker locale={locale} format="YYYY-MM-DD" placeholder={placeholder}></DatePicker>
+                            )
+                        }
+                    </FormItem>
+                    formItemList.push(DATE);
+                }
             })
         }
         return formItemList;

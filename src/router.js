@@ -29,6 +29,10 @@ import NoMatch from './page/nomatch';
 import Common from './common';
 // 订单详情
 import OrderDetail from './page/order/detail';
+// 员工操作
+import User from './page/user/index';
+// 车辆地图
+import BikeMap from './page/map/bikeMap';
 
 export default class IRouter extends React.Component{
 
@@ -53,7 +57,9 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/table/basic" component={BasicTable}></Route>  
                                 <Route path="/admin/table/high" component={HightTable}></Route>   
                                 <Route path="/admin/city" component={City}></Route>   
-                                <Route path="/admin/order" component={Order}></Route>  
+                                <Route path="/admin/order" component={Order}></Route> 
+                                <Route path="/admin/user" component={User}></Route>    
+                                <Route path="/admin/bikeMap" component={BikeMap}></Route>    
                                 <Route component={NoMatch}></Route>
                             </Switch>
                         </Admin>

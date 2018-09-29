@@ -8,7 +8,7 @@ export default class Axios{
     static requestListPost(_this, url, params, isMock) {
 
         let data = {
-            params: params,
+            params,
             isMock
         }
         this.ajax({
@@ -38,7 +38,8 @@ export default class Axios{
     static requestListGet(_this, url, params, isMock) {
 
         let data = {
-            params: params
+            params,
+            isMock
         }
         this.get({
             url,
@@ -62,7 +63,7 @@ export default class Axios{
         })
     }
 
-    static jsonp(options) {
+    static jsonpData(options) {
         return new Promise((resolve, reject) => {
             Jsonp(options.url, {
                 param: 'callback'
@@ -84,7 +85,7 @@ export default class Axios{
             loading.style.display = 'block';
         }
 
-        let baseUrl = '';
+        let baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
         if(options.data.isMock) {
             baseUrl = 'https://www.easy-mock.com/mock/5ba3971c00424530fc9db8ae/mockApi';
         } else {
@@ -104,7 +105,7 @@ export default class Axios{
                     loading.style.display = 'none';
                 }
                 if(res.status === 200) {
-                    if(res.data.code === 0) {
+                    if(res.data.code === 0  || res.data.code === '0') {
                         resolve(res.data)
                     } else {
                         Modal.info({
@@ -132,7 +133,7 @@ export default class Axios{
             loading.style.display = 'block';
         }
 
-        let baseUrl = '';
+        let baseUrl = 'https://www.easy-mock.com/mock/5a7278e28d0c633b9c4adbd7/api';
         if(options.data.isMock) {
             baseUrl = 'https://www.easy-mock.com/mock/5a7278e28d0c633b9c4adbd7/api';
         } else {
@@ -152,7 +153,7 @@ export default class Axios{
                     loading.style.display = 'none';
                 }
                 if(res.status === 200) {
-                    if(res.data.code === '0') {
+                    if(res.data.code === '0' || res.data.code === 0) {
                         resolve(res.data)
                     } else {
                         Modal.info({
