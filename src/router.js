@@ -33,6 +33,10 @@ import OrderDetail from './page/order/detail';
 import User from './page/user/index';
 // 车辆地图
 import BikeMap from './page/map/bikeMap';
+// echart
+import Bar from './page/echarts/bar/index';
+import Line from './page/echarts/line/index';
+import Pie from './page/echarts/pie/index';
 
 export default class IRouter extends React.Component{
 
@@ -60,6 +64,9 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/order" component={Order}></Route> 
                                 <Route path="/admin/user" component={User}></Route>    
                                 <Route path="/admin/bikeMap" component={BikeMap}></Route>    
+                                <Route path="/admin/charts/bar" component={Bar}></Route>    
+                                <Route path="/admin/charts/line" component={Line}></Route>    
+                                <Route path="/admin/charts/pie" component={Pie}></Route>    
                                 <Route component={NoMatch}></Route>
                             </Switch>
                         </Admin>

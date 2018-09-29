@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Table, Button, message, Form, Modal, Input, Radio, Select, DatePicker} from 'antd';
 import BaseForm from '../../component/BaseForm/index';
-import Utils from '../../utils/utils';
 import axios from '../../axios/index';
 import Moment from 'moment';
 const FormItem = Form.Item;
@@ -169,7 +168,7 @@ export default class User extends React.Component {
             title: '性别',
             dataIndex: 'sex',
             render(sex){
-                return sex ==1 ?'男':'女'
+                return sex ===1 ?'男':'女'
             }
           }, {
             title: '状态',
