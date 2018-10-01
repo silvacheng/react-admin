@@ -34,9 +34,9 @@ import User from './page/user/index';
 // 车辆地图
 import BikeMap from './page/map/bikeMap';
 // echart
-import Bar from './page/echarts/bar/index';
-import Line from './page/echarts/line/index';
-import Pie from './page/echarts/pie/index';
+// import Bar from './page/echarts/bar/index';
+// import Line from './page/echarts/line/index';
+// import Pie from './page/echarts/pie/index';
 // richText 
 import RichText from './page/rich/index';
 // PermissionUser
@@ -74,9 +74,9 @@ export default class IRouter extends React.Component{
                                     <Route path="/order" component={Order}></Route> 
                                     <Route path="/user" component={User}></Route>    
                                     <Route path="/bikeMap" component={BikeMap}></Route>    
-                                    <Route path="/charts/bar" component={Bar}></Route>    
+                                    {/* <Route path="/charts/bar" component={Bar}></Route>    
                                     <Route path="/charts/line" component={Line}></Route>    
-                                    <Route path="/charts/pie" component={Pie}></Route>    
+                                    <Route path="/charts/pie" component={Pie}></Route>     */}
                                     <Route path="/rich" component={RichText}></Route>    
                                     <Route path="/permission" component={PermissionUser}></Route>    
                                     <Route component={NoMatch}></Route>
