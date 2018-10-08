@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Modal, Table, Form, Input, Select, message, Tree} from 'antd';
+import { Card, Button, Modal, Table, Form, Input, Select, message, Tree, Transfer} from 'antd';
 import axios from './../../axios/index';
 import Utils from '../../utils/utils';
 import menuConfig from './../../config/menuConfig'
@@ -10,7 +10,8 @@ export default class PermissionUser extends React.Component{
 
     state = {
         isRoleVisible: false,
-        isPremVisible: false
+        isPremVisible: false,
+        isUserVisible: false
     }
 
     componentDidMount() {
@@ -118,6 +119,80 @@ export default class PermissionUser extends React.Component{
         })
     }
 
+    // 点击用户授权按钮
+    handleUserAuth = () => {
+        if(!this.state.selectItem) {
+            Modal.info({
+                title: '提示',
+                content: '未选中任何用户'
+            })
+            return;
+        }
+        this.getRoleUserList(this.state.selectItem.id);
+        this.setState({
+            isUserVisible: true,
+            detailInfo: this.state.selectItem
+        })
+    }
+
+    // 获取roleList
+    getRoleUserList = (id) => {
+        axios.get({
+            url: '/role/user_list',
+            data: {
+                params: {
+                    id: id
+                }
+            }
+        }).then(res => {
+            if(res.code === 0) {
+                this.getAuthUserList(res.result)
+            }
+        })
+    }
+
+    // 筛选目标用户
+    getAuthUserList = (dataSource) => {
+        let mockData = [];
+        let targetKeys = [];
+        if(dataSource && dataSource.length > 0) {
+            for(let i = 0; i < dataSource.length; i++) {
+                let data = {
+                    key: dataSource[i].user_id,
+                    title: dataSource[i].user_name,
+                    status: dataSource[i].status,
+                }
+                if(data.status === 1) {
+                    targetKeys.push(data.key)
+                }
+                mockData.push(data)
+            }
+            this.setState({mockData, targetKeys});
+        }
+    }
+
+    // 用户授权提交
+    handleUserSubmit = () => {
+        let data = {};
+        data.user_ids = this.state.targetKeys || [];
+        data.role_id = this.state.selectItem.id;
+        axios.get({
+            url: '/role/user_role_edit',
+            data: {
+                params: {
+                    ...data
+                }
+            }
+        }).then(res => {
+            if(res.code === 0) {
+                this.setState({
+                    isUserVisible: false
+                })
+                this.requestList();
+            }
+        })
+    }
+
     render() {
 
         const columns = [
@@ -216,6 +291,29 @@ export default class PermissionUser extends React.Component{
                         }}
                     />     
                 </Modal>
+                <Modal
+                    title="用户授权"
+                    visible={this.state.isUserVisible}
+                    onOk={this.handleUserSubmit}
+                    width={800}
+                    onCancel={() => {
+                        this.setState({
+                            isUserVisible: false
+                        })
+                    }}
+                >
+                    <RoleAuthForm 
+                        wrappedComponentRef={(inst) => this.PremEditForm = inst}
+                        detailInfo={this.state.detailInfo}
+                        targetKeys={this.state.targetKeys}
+                        mockData={this.state.mockData}
+                        patchUserInfo={(targetKeys) => {
+                            this.setState({
+                                targetKeys
+                            })
+                        }}
+                    />     
+                </Modal>
             </div>
         );
     }
@@ -292,7 +390,7 @@ class PremEditForm extends React.Component{
     }    
     
     renderBtnTreedNode = (menu, key='') => {
-        const btnNodeTree = [];
+        let btnNodeTree = [];
 
         menu.btnList.forEach((item) => {
             btnNodeTree.push(<TreeNode title={item.title} key={key+'/' + item.key} className="op-role-tree"></TreeNode>)
@@ -343,4 +441,48 @@ class PremEditForm extends React.Component{
     }
 }
 PremEditForm = Form.create({})(PremEditForm)
+
+// 用户授权
+class RoleAuthForm extends React.Component{
+
+    filterOption = (inputValue, option) => {
+        return option.title.indexOf(inputValue) > -1;
+    }
+
+    handleChange = (targetKeys) => {
+        this.props.patchUserInfo(targetKeys);
+    }
+
+    render() {
+
+        const formItemLayout = {
+            labelCol: {span: 5},
+            wrapperCol: {span: 18}
+        }
+
+        const detail_info = this.props.detailInfo;
+
+        return (
+            <Form layout="horizontal">
+                <FormItem label="角色名称:" {...formItemLayout}>
+                    <Input disabled maxLength={10} placeholder={detail_info.role_name}></Input>
+                </FormItem>
+                <FormItem label="选择用户:" {...formItemLayout}>
+                    <Transfer
+                        listStyle={{width: 200, height: 400}}
+                        dataSource={this.props.mockData}
+                        showSearch
+                        titles={['待选用户', '已选用户']}
+                        locale={{searchPlaceholder: '请输入用户名'}}
+                        filterOption={this.filterOption}
+                        targetKeys={this.props.targetKeys}
+                        onChange={this.handleChange}
+                        render={item => item.title}                    
+                    />
+                </FormItem>
+            </Form>
+        )
+    }
+}
+RoleAuthForm = Form.create({})(RoleAuthForm)
 
