@@ -37,9 +37,7 @@ export default class RichText extends React.Component{
         this.setState({
             isShowRichText: true
         })
-        console.log(draftjs(this.state.contentState))        
     }
-
     render() {
         const { editorState } = this.state;
         return (
