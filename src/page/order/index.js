@@ -54,22 +54,6 @@ export default class Order extends React.Component{
     // 获取订单列表
     requestList = () => {
         axios.requestListPost(this, '/order/list', this.params, true);
-        // axios.ajax({
-        //     url: '/order/list',
-        //     data: {
-        //         params: this.params
-        //     }
-        // }).then(res => {
-        //     if(res.code === 0) {
-        //         this.setState({
-        //             list: res.result.item_list,
-        //             pagination: Utils.pagination(res, (current)=> {
-        //                 this.params.page = current
-        //                 this.requestList();
-        //             })
-        //         })
-        //     }
-        // })
     }
 
     // 选中某条数据

@@ -1,12 +1,14 @@
 import React from 'react'
-import { Row, Col } from 'antd'
+import { Row, Col, Modal } from 'antd'
 import './index.less'
 import Util from '../../utils/utils'
 import axios from '../../axios'
 import { connect } from 'react-redux';
 class Header extends React.Component {
 
-    state = {}
+    state = {
+        isShowModal: false
+    }
 
     componentWillMount () {
         this.setState({
@@ -19,6 +21,19 @@ class Header extends React.Component {
             })            
         }, 1000)
         // this.getWeatherAPIData();
+    }
+
+    handleQuit = () => {
+        this.setState({
+            isShowModal: true
+        })
+    }
+
+    handleConfirm = () => {
+        this.setState({
+            isShowModal: false 
+        })
+        window.location.href = '/#/login';
     }
 
     getWeatherAPIData() {
@@ -50,7 +65,7 @@ class Header extends React.Component {
                     }    
                     <Col span={menuType?18:24}>
                         <span>欢迎，{this.state.userName}</span>
-                        <a href="#">退出</a>
+                        <a onClick={this.handleQuit}>退出</a>
                     </Col>
                 </Row>
                 {
@@ -68,6 +83,20 @@ class Header extends React.Component {
                         </Col>
                     </Row>
                 }
+                <Modal
+                    title="提示"
+                    visible={this.state.isShowModal}
+                    okText="确定"
+                    cancelText="取消"
+                    onOk={this.handleConfirm}
+                    onCancel={()=> {
+                        this.setState({
+                            isShowModal: false
+                        })
+                    }}
+                >
+                    <p>确定退出吗，亲？</p>
+                </Modal>
             </div>
         )
     }
