@@ -9,9 +9,9 @@ import reducer from './../reducer';
 // 安装redux-devtools-extension的可视化工具。
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const initialState = {
-    menuName:'首页'
-}
+// const initialState = {
+//     menuName:'首页'
+// }
 const configureStore = () => createStore(reducer, composeWithDevTools());
 // const configureStore = (prevState) => createStore(reducer, prevState);
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card} from 'antd'
 import ReactEcharts from 'echarts-for-react';
-import echartTheme from '../echartTheme'
+// import echartTheme from '../echartTheme'
 import themeLight from '../themeLight'
 // import echarts from 'echarts'
 import echarts from 'echarts/lib/echarts'

@@ -15,7 +15,7 @@ class NavLeft extends React.Component {
 
     handleClick = ({item, key}) => {
         // console.log({item, key})
-        if(key == this.state.currentKey) {
+        if(key === this.state.currentKey) {
             return false;
         }
 

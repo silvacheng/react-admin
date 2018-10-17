@@ -1,8 +1,8 @@
 import React from 'react'
 import {Form, Input, Button} from 'antd'
-import axios from '../../axios/index'
+// import axios from '../../axios/index'
 import Footer from '../../component/Footer'
-import Utils from '../../utils/utils'
+// import Utils from '../../utils/utils'
 import './index.less'
 const FormItem = Form.Item;
 
